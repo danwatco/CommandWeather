@@ -4,31 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using DarkSkyApi;
+using DarkSkyApi.Models;
+
 
 namespace CommandWeather
 {
     class Program
     {
+        public static DarkSkyService client = new DarkSkyService("d96970bf601538b3a43b1eb547d865ba");
+        public static Forecast result;
+
         static void Main(string[] args)
         {
-            string ascii1 = @"__          __    _                                _            _____                           _     __          __           _    _";                
-            string ascii2 = @"\ \        / /   | |                              | |          / ____|                         | |    \ \        / /          | |  | |";               
-            string ascii3 = @" \ \  /\  / /___ | |  ___  ___   _ __ ___    ___  | |_  ___   | |      ___   _ __   ___   ___  | |  ___\ \  /\  / /___   __ _ | |_ | |__    ___  _ __";
-            string ascii4 = @"  \ \/  \/ // _ \| | / __|/ _ \ | '_ ` _ \  / _ \ | __|/ _ \  | |     / _ \ | '_ \ / __| / _ \ | | / _ \\ \/  \/ // _ \ / _` || __|| '_ \  / _ \| '__|";
-            string ascii5 = @"   \  /\  /|  __/| || (__| (_) || | | | | ||  __/ | |_| (_) | | |____| (_) || | | |\__ \| (_) || ||  __/ \  /\  /|  __/| (_| || |_ | | | ||  __/| |";   
-            string ascii6 = @"    \/  \/  \___||_| \___|\___/ |_| |_| |_| \___|  \__|\___/   \_____|\___/ |_| |_||___/ \___/ |_| \___|  \/  \/  \___| \__,_| \__||_| |_| \___||_|";
 
 
+            typeWrite("Hello!");
 
-
-            typeWrite(ascii1);
-            typeWrite(ascii2);
-            typeWrite(ascii3);
-            typeWrite(ascii4);
-            typeWrite(ascii5);
-            typeWrite(ascii6);
-            
-
+            Task<Forecast> localRes = getWeather(51.4201050, -0.7242300);
+            typeWrite(localRes.Result.Currently.Summary);
 
             Console.ReadLine();
         }
@@ -40,9 +34,16 @@ namespace CommandWeather
             for (int i = 0; i < chars.Length ; i++)
             {
                 Console.Write(chars[i]);
-                Thread.Sleep(5);
+                Thread.Sleep(100);
             }
             Console.WriteLine("");
+        }
+
+        static async Task<Forecast> getWeather(double latitude, double longitude)
+        {
+            Forecast res = await client.GetWeatherDataAsync(latitude, longitude);
+            result = res;
+            return res;
         }
     }
 }
