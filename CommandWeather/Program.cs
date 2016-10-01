@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Net;
 using DarkSkyApi;
 using DarkSkyApi.Models;
+using Newtonsoft.Json;
 
 
 namespace CommandWeather
@@ -20,8 +22,8 @@ namespace CommandWeather
 
 
             typeWrite("Hello!");
-
-            Task<Forecast> localRes = getWeather(51.4201050, -0.7242300);
+            double[] location = getLocation();
+            Task<Forecast> localRes = getWeather(location[0], location[1]);
             typeWrite(localRes.Result.Currently.Summary);
 
             Console.ReadLine();
@@ -45,5 +47,34 @@ namespace CommandWeather
             result = res;
             return res;
         }
+
+        static double[] getLocation()
+        {
+            var json = new WebClient().DownloadString("http://freegeoip.net/json/");
+            //Info res = JsonConvert.DeserializeObject<string[,]>(json);
+            Info res = JsonConvert.DeserializeObject<Info>(json);
+            double[] ret = new double[]{ res.latitude, res.longitude };
+            return ret;
+        }
     }
+
+    public class Info
+    {
+        /*@"{"ip":"86.179.111.58",
+                "country_code":"GB","country_name":"United Kingdom",
+                "region_code":"ENG","region_name":"England","city":"Bracknell",
+                "zip_code":"RG12","time_zone":"Europe/London","latitude":51.4167,"longitude":-0.75,"metro_code":0}";*/
+        public string country_code { get; set; }
+        public string country_name { get; set; }
+        public string region_code { get; set; }
+        public string region_name { get; set; }
+        public string city { get; set; }
+        public string zip_code { get; set; }
+        public string time_zone { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+        public int metro_code { get; set; }
+
+    }
+
 }
