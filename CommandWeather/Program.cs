@@ -19,26 +19,35 @@ namespace CommandWeather
 
         static void Main(string[] args)
         {
-
-
-            typeWrite("Hello!");
+            string[] days = new string[] { "Mon".PadLeft(5), "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+            
+            foreach (string d in days)
+            {
+                typeWrite(d.PadRight(7), 30, false);
+                
+            }
+            Console.WriteLine("");
+            typeWrite("Hello!", 100);
             double[] location = getLocation();
             Task<Forecast> localRes = getWeather(location[0], location[1]);
-            typeWrite(localRes.Result.Currently.Summary);
+            typeWrite(localRes.Result.Currently.Summary, 100);
 
             Console.ReadLine();
         }
 
-        static void typeWrite(string input)
+        static void typeWrite(string input, int speed, bool newLine = true)
         {
             char[] chars = input.ToCharArray();
 
             for (int i = 0; i < chars.Length ; i++)
             {
                 Console.Write(chars[i]);
-                Thread.Sleep(100);
+                Thread.Sleep(speed);
             }
-            Console.WriteLine("");
+            if (newLine)
+            {
+                Console.WriteLine("");
+            }
         }
 
         static async Task<Forecast> getWeather(double latitude, double longitude)
