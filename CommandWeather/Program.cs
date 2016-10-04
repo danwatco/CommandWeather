@@ -52,7 +52,9 @@ namespace CommandWeather
 
         static async Task<Forecast> getWeather(double latitude, double longitude)
         {
-            Forecast res = await client.GetWeatherDataAsync(latitude, longitude);
+            SpinAnimation.Start(100);
+            Forecast res = await client.GetWeatherDataAsync(latitude, longitude, DarkSkyApi.Unit.Auto);
+            SpinAnimation.Stop();
             result = res;
             return res;
        } 
