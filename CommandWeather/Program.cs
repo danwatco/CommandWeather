@@ -20,16 +20,35 @@ namespace CommandWeather
 
         static void Main(string[] args)
         {
-            /*string[] days = new string[] { "Mon".PadLeft(10), "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-            
-            foreach (string d in days)
+            for(int i = 0; i < args.Length; i++)
             {
-                typeWrite(d.PadRight(7), 30, false);
-                
-            }*/
-            SpinAnimation.Start(100);
-            currentLocation = getLocation();
-            SpinAnimation.Stop();
+                switch (args[i])
+                {
+                    case "-l":
+                        string[] location = args[i + 1].Split(',');
+                        double[] newLocation = new double[] { Convert.ToDouble(location[0]), Convert.ToDouble(location[1]) };
+                        currentLocation = newLocation;
+                        break;
+                    case "search":
+                        //do something with search
+                        break;
+                    case "":
+                        SpinAnimation.Start(100);
+                        currentLocation = getLocation();
+                        SpinAnimation.Stop();
+                        break;
+                    default:
+                        //incorrect args??
+                        
+                        break;
+                }
+            }
+            Console.WriteLine("Welcome to CommandWeather, use 'commandweather help' to see usage.");
+            Console.WriteLine("Meanwhile, your current weather based on your IP is below.");
+            Console.WriteLine("");
+
+            
+
             displayWeekWeather();
 
             Console.ReadLine();
