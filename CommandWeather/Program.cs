@@ -25,32 +25,39 @@ namespace CommandWeather
 
         static void Main(string[] args)
         {
-            for(int i = 0; i < args.Length; i++)
+            if (args.Length > 0)
             {
-                switch (args[i])
+                for (int i = 0; i < args.Length; i++)
                 {
-                    case "-l":
-                        string[] location = args[i + 1].Split(',');
-                        double[] newLocation = new double[] { Convert.ToDouble(location[0]), Convert.ToDouble(location[1]) };
-                        currentLocation = newLocation;
-                        break;
-                    case "search":
-                        //do something with search
-                        locationSearch(args[i + 1]);
-                        break;
-                    case "":
-                        Console.WriteLine("Welcome to CommandWeather, use 'commandweather help' to see usage.");
-                        Console.WriteLine("Meanwhile, your current weather based on your IP is below.");
-                        SpinAnimation.Start(100);
-                        currentLocation = getLocation();
-                        SpinAnimation.Stop();
-                        break;
-                    default:
-                        //incorrect args??
-                        
-                        break;
+                    switch (args[i])
+                    {
+                        case "-l":
+                            string[] location = args[i + 1].Split(',');
+                            double[] newLocation = new double[] { Convert.ToDouble(location[0]), Convert.ToDouble(location[1]) };
+                            currentLocation = newLocation;
+                            break;
+                        case "search":
+                            //do something with search
+                            locationSearch(args[i + 1]);
+                            break;
+                        case "":
+                            
+                            break;
+                        default:
+                            //incorrect args??
+
+                            break;
+                    }
                 }
+            } else
+            {
+                Console.WriteLine("Welcome to CommandWeather, use 'commandweather help' to see usage.");
+                Console.WriteLine("Meanwhile, your current weather based on your IP is below.");
+                SpinAnimation.Start(100);
+                currentLocation = getLocation();
+                SpinAnimation.Stop();
             }
+            
             
             Console.WriteLine("");
 
