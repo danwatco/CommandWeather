@@ -8,6 +8,10 @@ using System.Net;
 using DarkSkyApi;
 using DarkSkyApi.Models;
 using Newtonsoft.Json;
+using GoogleApi.Entities.Common;
+using GoogleApi.Entities.Places.Search.Common.Enums;
+using GoogleApi.Entities.Places.Search.Text.Request;
+using GoogleApi.Entities.Places.Search.Text.Response;
 
 
 namespace CommandWeather
@@ -17,6 +21,7 @@ namespace CommandWeather
         public static DarkSkyService client = new DarkSkyService("d96970bf601538b3a43b1eb547d865ba");
         public static Forecast result;
         public static double[] currentLocation;
+        public static string googleApiKey = "AIzaSyD6X3--xfPZ4vpKG0h7sf_51M1DgrbH28o";
 
         static void Main(string[] args)
         {
@@ -31,8 +36,11 @@ namespace CommandWeather
                         break;
                     case "search":
                         //do something with search
+                        locationSearch(args[i + 1]);
                         break;
                     case "":
+                        Console.WriteLine("Welcome to CommandWeather, use 'commandweather help' to see usage.");
+                        Console.WriteLine("Meanwhile, your current weather based on your IP is below.");
                         SpinAnimation.Start(100);
                         currentLocation = getLocation();
                         SpinAnimation.Stop();
@@ -43,8 +51,7 @@ namespace CommandWeather
                         break;
                 }
             }
-            Console.WriteLine("Welcome to CommandWeather, use 'commandweather help' to see usage.");
-            Console.WriteLine("Meanwhile, your current weather based on your IP is below.");
+            
             Console.WriteLine("");
 
             
@@ -136,15 +143,7 @@ namespace CommandWeather
             typeWrite("Summary: " + localR.Result.Daily.Summary, 30);
             
 
-        }
-
-        public static string PadBoth(string source, int length)
-        {
-            int spaces = length - source.Length;
-            int padLeft = spaces / 2 + source.Length;
-            return source.PadLeft(padLeft).PadRight(length);
-
-        }
+        }     
 
         public static string[] currentDayOrder()
         {
@@ -161,6 +160,51 @@ namespace CommandWeather
                 res[i] = dayOrder[dayOrderPos];
             }
             return res;
+        }
+
+        public static void locationSearch(string query)
+        {
+            PlacesTextSearchRequest request = new PlacesTextSearchRequest
+            {
+                Key = googleApiKey,
+                Sensor = true,
+                Language = "en",
+                Query = query
+            };
+
+            PlacesTextSearchResponse res = GoogleApi.GooglePlaces.TextSearch.Query(request);
+            if (res.Results.ToArray().Length == 1)
+            {
+                string location = res.Results.ToArray()[0].FormattedAddress;
+                Console.WriteLine("You have chosen '" + location + "' as your location for the weather.");
+                double[] coords = new double[] { res.Results.ToArray()[0].Geometry.Location.Latitude, res.Results.ToArray()[0].Geometry.Location.Longitude };
+                currentLocation = coords;
+            }
+            else
+            {
+                Console.WriteLine("Multiple locations recieved, choose one below by typing the number and hitting enter.");
+                string[] order = new string[res.Results.ToArray().Length];
+                for (int i = 0; i < res.Results.ToArray().Length; i++)
+                {
+                    int n = i + 1;
+                    string s = n.ToString() + ". ";
+                    order[i] = s;
+                }
+
+                for (int i = 0; i < res.Results.ToArray().Length; i++)
+                {
+                    Console.Write(order[i]);
+                    string location = res.Results.ToArray()[i].FormattedAddress;
+                    Console.WriteLine(location);
+                }
+
+                string choice = Console.ReadLine().Trim(new char[] { ' ', '.' });
+                int c = Convert.ToInt32(choice) - 1;
+                double[] coords = new double[] { res.Results.ToArray()[c].Geometry.Location.Latitude, res.Results.ToArray()[c].Geometry.Location.Longitude };
+                Console.Clear();
+                Console.WriteLine("You have chosen '" + res.Results.ToArray()[c].FormattedAddress + "' as your location for the weather.");
+                currentLocation = coords;
+            }
         }
     }
 
