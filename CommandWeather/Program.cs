@@ -18,10 +18,10 @@ namespace CommandWeather
 {
     class Program
     {
-        public static DarkSkyService client = new DarkSkyService("d96970bf601538b3a43b1eb547d865ba");
+        public static DarkSkyService client = new DarkSkyService(ProgramData.darkSkyApiKey);
         public static Forecast result;
         public static double[] currentLocation;
-        public static string googleApiKey = "AIzaSyD6X3--xfPZ4vpKG0h7sf_51M1DgrbH28o";
+        public static string googleApiKey = ProgramData.googleApiKey;
 
         static void Main(string[] args)
         {
