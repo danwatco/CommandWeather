@@ -132,6 +132,8 @@ namespace CommandWeather
                     case "":
 
                         break;
+                    case "help":
+                        Console.WriteLine("Here is some help.");
                     default:
                         //incorrect args??
 

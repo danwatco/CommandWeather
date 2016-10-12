@@ -5,13 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
-using DarkSkyApi;
-using DarkSkyApi.Models;
-using Newtonsoft.Json;
-using GoogleApi.Entities.Common;
-using GoogleApi.Entities.Places.Search.Common.Enums;
-using GoogleApi.Entities.Places.Search.Text.Request;
-using GoogleApi.Entities.Places.Search.Text.Response;
 
 
 namespace CommandWeather
