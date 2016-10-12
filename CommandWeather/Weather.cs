@@ -20,7 +20,7 @@ namespace CommandWeather
         private string darkSkyApiKey;
         private string googleApiKey;
         private DarkSkyService client;
-        private double[] currentLocation;
+        public double[] currentLocation;
         public Forecast result;
 
         public Weather(string darkapi, string googlapi)
@@ -130,7 +130,7 @@ namespace CommandWeather
                         locationSearch(args[i + 1]);
                         break;
                     case "":
-
+                        currentLocation = getLocation();
                         break;
                     case "help":
                         Console.WriteLine("Here is some help.");

@@ -22,7 +22,7 @@ namespace CommandWeather
                 Console.WriteLine("Welcome to CommandWeather, use 'commandweather help' to see usage.");
                 Console.WriteLine("Meanwhile, your current weather based on your IP is below.");
                 SpinAnimation.Start(100);
-                weather.getLocation();
+                weather.currentLocation = weather.getLocation();
                 SpinAnimation.Stop();
             }      
             Console.WriteLine("");
